@@ -1,8 +1,10 @@
 package com.filereader.LogFileReader;
 
 
+import com.filereader.LogFileReader.service.DataProcessorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +17,10 @@ import java.util.stream.Stream;
 
 @SpringBootApplication
 public class LogFileReaderApplication implements CommandLineRunner {
-	final Logger log = LoggerFactory.getLogger(getClass());
+	final Logger log = LoggerFactory.getLogger(LogFileReaderApplication.class);
+
+	@Autowired
+	DataProcessorService dataProcessorService;
 
 
 	public static void main(String[] args) {
@@ -35,6 +40,7 @@ public class LogFileReaderApplication implements CommandLineRunner {
 			Stream<String> lines = Files.lines(path);
 			String data = lines.collect(Collectors.joining("\n"));
 			log.info(data);
+			dataProcessorService.processInputData(data);
 			lines.close();
 		}catch(NullPointerException e){
 			log.error(e.getMessage());

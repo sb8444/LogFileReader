@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,8 +43,8 @@ public class LogFileReaderApplication implements CommandLineRunner {
 			log.info(data);
 			dataProcessorService.processInputData(data);
 			lines.close();
-		}catch(NullPointerException e){
-			log.error(e.getMessage());
+		}catch(NullPointerException | FileNotFoundException e){
+			log.error("File Processing Failed due to "+e.getMessage());
 		}
 	}
 }

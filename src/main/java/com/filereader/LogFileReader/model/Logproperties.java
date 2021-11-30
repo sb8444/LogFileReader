@@ -2,7 +2,9 @@ package com.filereader.LogFileReader.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 public class Logproperties {
     @Getter @Setter
     private String id;
@@ -13,5 +15,5 @@ public class Logproperties {
     @Getter @Setter
     private String host;
     @Getter @Setter
-    private String timestamp;
+    private Long timestamp;
 }

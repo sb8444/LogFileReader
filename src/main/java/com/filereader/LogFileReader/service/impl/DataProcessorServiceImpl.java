@@ -2,6 +2,8 @@ package com.filereader.LogFileReader.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.filereader.LogFileReader.Constant.CommonConstant;
+import com.filereader.LogFileReader.Utils.DataProcessorUtility;
 import com.filereader.LogFileReader.model.Logproperties;
 import com.filereader.LogFileReader.service.DataProcessorService;
 import org.slf4j.Logger;
@@ -9,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,8 +44,31 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
         log.info(distinctLogIdList.toString());
 
+        for(String logId:distinctLogIdList)
+        {
+            calculateAndInsertData(logsList,logId);
+        }
+
 
     }
+
+    private void calculateAndInsertData(List<Logproperties> logsList, String logId) {
+        Map<String,Long> timestampMap=new HashMap<String,Long>();
+        for (Logproperties lp:logsList)
+        {
+            if(StringUtils.hasText(lp.getId())&&lp.getId().equalsIgnoreCase(logId))
+            {
+                timestampMap.put(lp.getState(), lp.getTimestamp());
+            }
+        }
+        Long eventDuration= DataProcessorUtility.getEventDuration(timestampMap);
+
+        log.info("MV: "+timestampMap.toString());
+        log.info("Event Id: "+logId+" | Duration: "+eventDuration+" |EventDurationLongerFlag: "+DataProcessorUtility.isEventLongerThanSLA(eventDuration));
+
+    }
+
+
 
     private List<Logproperties> getLogList(List<String> logStringList) {
         ObjectMapper mapper = new ObjectMapper();

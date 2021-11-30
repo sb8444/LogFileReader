@@ -64,7 +64,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
         Long eventDuration= DataProcessorUtility.getEventDuration(timestampMap);
 
         log.info("MV: "+timestampMap.toString());
-        log.info("Event Id: "+logId+" | Duration: "+eventDuration+" |EventDurationLongerFlag: "+DataProcessorUtility.isEventLongerThanSLA(eventDuration));
+        log.info("Event Id: "+logId+" | Duration: "+eventDuration+"ms |EventDurationLongerFlag: "+DataProcessorUtility.isEventLongerThanSLA(eventDuration));
 
     }
 

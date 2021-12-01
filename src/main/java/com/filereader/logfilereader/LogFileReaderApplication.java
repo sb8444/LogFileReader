@@ -1,7 +1,7 @@
-package com.filereader.LogFileReader;
+package com.filereader.logfilereader;
 
 
-import com.filereader.LogFileReader.service.DataProcessorService;
+import com.filereader.logfilereader.service.DataProcessorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +35,13 @@ public class LogFileReaderApplication implements CommandLineRunner {
 
 		try
 		{
+			log.info("Reading Log File Content...");
 			Path path = Paths.get(getClass().getClassLoader()
 					.getResource("logFile.txt").toURI());
 
 			Stream<String> lines = Files.lines(path);
 			String data = lines.collect(Collectors.joining("\n"));
-			log.info(data);
+			log.debug("File Content: "+data);
 			dataProcessorService.processInputData(data);
 			lines.close();
 		}catch(NullPointerException | FileNotFoundException e){

@@ -1,4 +1,4 @@
-package com.filereader.LogFileReader.Constant;
+package com.filereader.logfilereader.constant;
 
 public class CommonConstant {
 

@@ -1,4 +1,4 @@
-package com.filereader.LogFileReader.model;
+package com.filereader.logfilereader.model;
 
 import lombok.Getter;
 import lombok.Setter;

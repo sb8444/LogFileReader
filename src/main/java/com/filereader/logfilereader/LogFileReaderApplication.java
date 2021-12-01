@@ -30,12 +30,18 @@ public class LogFileReaderApplication implements CommandLineRunner {
 		app.run(args);
 	}
 
+	/**
+	 *
+	 * @param args
+	 * @throws Exception
+	 * Reads the content of a file and converts it into a String
+	 */
 	@Override
 	public void run(String... args) throws Exception {
 
 		try
 		{
-			log.info("Reading Log File Content...");
+			log.info("Reading Log File Contents...");
 			Path path = Paths.get(getClass().getClassLoader()
 					.getResource("logFile.txt").toURI());
 

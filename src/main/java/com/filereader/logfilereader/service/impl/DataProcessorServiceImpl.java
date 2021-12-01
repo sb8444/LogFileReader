@@ -23,13 +23,19 @@ public class DataProcessorServiceImpl implements DataProcessorService {
     DataRepository dataRepository;
 
     final Logger log = LoggerFactory.getLogger(DataProcessorServiceImpl.class);
+
+    /**
+     *
+     * @param data
+     * This Method Reads the String and converts it into a List<String> by splitting the String on basis of new line character
+     */
     @Override
     public void processInputData(String data) {
         List<String> logStringList= Arrays.asList(data.split("\n"));
         log.info(logStringList.toString());
         List<Logproperties> logsList= new ArrayList<Logproperties>();
         logsList=getLogList(logStringList);
-        log.info(logsList.toString());
+        log.debug(logsList.toString());
         if(!logsList.isEmpty())
         {
             processLogsList(logsList);
@@ -40,7 +46,11 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
     }
 
-
+    /**
+     *
+     * @param logsList
+     * Method gets the unique list of Event Ids and proceeds with insertion of data in the DB
+     */
 
     private void processLogsList(List<Logproperties> logsList) {
         List<String> distinctLogIdList=logsList.stream()
@@ -49,7 +59,7 @@ public class DataProcessorServiceImpl implements DataProcessorService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        log.info("Unique Event Names: "+distinctLogIdList.toString());
+        log.info("Unique Event IDs: "+distinctLogIdList.toString());
 
         for(String logId:distinctLogIdList)
         {
@@ -58,6 +68,13 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
 
     }
+
+    /**
+     *
+     * @param logsList
+     * @param logId
+     * Method utilizes the utility classes and calculates the time duration of each event and stores them in the HSQL db.
+     */
 
     private void calculateAndInsertData(List<Logproperties> logsList, String logId) {
         Map<String,Long> timestampMap=new HashMap<String,Long>();
@@ -80,7 +97,11 @@ public class DataProcessorServiceImpl implements DataProcessorService {
 
     }
 
-
+    /**
+     *
+     * @param logStringList
+     * @return List<Logproperties> by using JSON Parsing and Mapping the variables to Logproperties model class
+     */
 
     private List<Logproperties> getLogList(List<String> logStringList) {
         ObjectMapper mapper = new ObjectMapper();
@@ -101,11 +122,16 @@ public class DataProcessorServiceImpl implements DataProcessorService {
         return logsList;
     }
 
+    /**
+     *
+     * @return List of all Logs from HSQL DB
+     */
+
     @Override
     public List<LogDbModel> getAllLogs() {
         List<LogDbModel> logDbModelList = new ArrayList<LogDbModel>();
         dataRepository.findAll().forEach(logDbModelList::add);
-        log.info("Retrieved DB List"+logDbModelList);
+        log.debug("Retrieved DB List"+logDbModelList);
         return logDbModelList;
     }
 }
